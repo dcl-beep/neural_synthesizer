@@ -23,7 +23,6 @@ from tensorflow.keras.layers import Activation, Dense
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import ReduceLROnPlateau
-from tensorflow.keras.losses import CategoricalCrossentropy
 
 import tensorflow_docs as tfdocs
 import tensorflow_docs.modeling
@@ -130,10 +129,7 @@ class RawAudioClassifier(object):
 
         self._model.compile(optimizer='adam',
                       loss='categorical_crossentropy',
-                      metrics=[
-                  tf.keras.losses.CategoricalCrossentropy(
-                      from_logits=False, name='categorical_crossentropy'),
-                  'accuracy']))
+                      metrics=['accuracy'])
 
 
 
@@ -162,7 +158,7 @@ class RawAudioClassifier(object):
         dots = tfdocs.modeling.EpochDots()
         early = tf.keras.callbacks.EarlyStopping(monitor='val_binary_crossentropy', patience=20)
         batch_size = 128
-        history = self._model.fit(x=x_tr,
+        self._model.fit(x=x_tr,
                   y=y_tr,
                   batch_size=batch_size,
                   epochs=20,
@@ -176,14 +172,12 @@ class RawAudioClassifier(object):
         self._model.save(model_filename)
 
         print("DONE")
-        return history
     
 
 
 if __name__ == '__main__':
     
-
+    pass
     # raw = RawAudioClassifier()
     # raw.setup_model()
     # raw.train_model(model_name='m5_30ep_22050_10_real2')
-    pass
